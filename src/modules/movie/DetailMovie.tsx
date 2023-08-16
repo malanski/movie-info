@@ -42,6 +42,14 @@ export const DetailMovie = () => {
         w="30%"
       >
         <Card
+          sx={{
+            width: '400px',
+            height: '400px',
+            borderRadius: 'lg',
+            perspective: '1000px',
+            transition: 'transform 0.5s ease',
+            transform: currentImageIndex === 1 ? 'rotateY(180deg)' : 'none',
+          }}
           bgImage={imageUrls[currentImageIndex]}
           fontWeight="bold"
           borderRadius="lg"
@@ -131,3 +139,21 @@ export const DetailMovie = () => {
     </Flex>
   )
 }
+// ;<style jsx>{`
+//   .card {
+//     position: relative;
+//     width: 100%;
+//     height: 100%;
+//     border-radius: lg;
+//     background-size: cover;
+//     background-position: center;
+//     cursor: pointer;
+//     transition: transform 0.5s ease;
+//     perspective: 1000px;
+//   }
+
+//   .flipped {
+//     transform: perspective(1000px) rotateY(180deg);
+//     transition: transform 0.5s ease;
+//   }
+// `}</style>
