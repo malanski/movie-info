@@ -1,12 +1,16 @@
-import { Box, Button, Flex, Grid } from '@chakra-ui/react'
+import { Box, Button, Grid, Flex, Skeleton } from '@chakra-ui/react'
+import { useContext } from 'react'
+
 import { MovieCard } from './components/movie-card/MovieCard'
 import { SearchMovie } from './components/search-movie/SearchMovie'
-import { useContext } from 'react'
 import { MoviesContext } from '@/context/MoviesContext'
 
 export const Main = () => {
   const { infoMovies, page, beforePage, nextPage } = useContext(MoviesContext)
-  const isDisableBeforePage = page < 2
+
+  const amountLoadingCard = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  const isDisabledBeforePage = page < 2
+
   return (
     <Box p={[4, 7, 10]}>
       <SearchMovie />
@@ -15,22 +19,60 @@ export const Main = () => {
         gap={5}
         p={[4, 8, 10]}
       >
-        {infoMovies.map((infoMovies) => (
-          <MovieCard
-            title={infoMovies.title}
-            imgUrl={infoMovies.poster_path}
-            genreIds={infoMovies.genre_ids}
-            key={infoMovies.id}
-            voteAverage={0}
-          />
-        ))}
+        {infoMovies.length > 0
+          ? infoMovies.map((infoMovie) => (
+              <MovieCard
+                title={infoMovie.title}
+                imgUrl={infoMovie.poster_path}
+                genreIds={infoMovie.genre_ids}
+                id={infoMovie.id}
+                key={infoMovie.id}
+                voteAverage={infoMovie.vote_average}
+              />
+            ))
+          : amountLoadingCard.map((number) => (
+              <Skeleton
+                w="220px"
+                h="300px"
+                startColor="background.yellow"
+                endColor="base.gray200"
+                fadeDuration={1}
+                borderRadius="lg"
+                p={5}
+                key={number}
+              />
+            ))}
       </Grid>
 
-      <Flex align="center" justifyContent="space-between" p={[2, 6, 10]}>
-        <Button isDisabled={isDisableBeforePage} onClick={beforePage}>
-          Página Anterior
+      <Flex align="center" justify="space-between" p={[2, 6, 10]}>
+        <Button
+          isDisabled={isDisabledBeforePage}
+          onClick={beforePage}
+          bg="background.yellow"
+          color="base.gray500"
+          padding="1rem 1.7rem"
+          _hover={{
+            bg: '#ffce1f',
+            fontWeight: 'bolder',
+            letterSpacing: '1px',
+          }}
+        >
+          Página anterior
         </Button>
-        <Button onClick={nextPage}>Próxima página</Button>
+
+        <Button
+          onClick={nextPage}
+          bg="background.yellow"
+          color="base.gray500"
+          padding="1rem 1.7rem"
+          _hover={{
+            bg: '#ffce1f',
+            fontWeight: 'bolder',
+            letterSpacing: '1px',
+          }}
+        >
+          Próxima página
+        </Button>
       </Flex>
     </Box>
   )

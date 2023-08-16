@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app'
 import { theme } from '@/themes'
 import { Header } from '@/components/Header'
 import { MoviesContextProvider } from '@/context/MoviesContext'
+import { Footer } from '@/components/Footer'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -15,6 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </MoviesContextProvider>
       </Box>
+      <Footer />
     </ChakraProvider>
   )
 }

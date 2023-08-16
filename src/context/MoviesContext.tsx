@@ -1,13 +1,8 @@
-import {
-  createContext,
-  ReactNode,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react'
+import { createContext, ReactNode, useState, useEffect } from 'react'
+
 import { TmdbApi } from '@/services/api'
 
-interface IMovies {
+interface IInfoMovies {
   adult: boolean
   backdrop_path: string
   genre_ids: number[]
@@ -23,12 +18,14 @@ interface IMovies {
   vote_average: number
   vote_count: number
 }
+
 interface IListGenres {
   id: number
   name: string
 }
+
 interface IMoviesContextType {
-  infoMovies: IMovies[]
+  infoMovies: IInfoMovies[]
   page: number
   beforePage: () => void
   nextPage: () => void
@@ -37,21 +34,25 @@ interface IMoviesContextType {
 
 export const MoviesContext = createContext({} as IMoviesContextType)
 
-interface IMoviesContextProps {
+interface IMoviesContextProviderProps {
   children: ReactNode
 }
-export const MoviesContextProvider = ({ children }: IMoviesContextProps) => {
-  const [infoMovies, setMovies] = useState<IMovies[]>([])
+
+export const MoviesContextProvider = ({
+  children,
+}: IMoviesContextProviderProps) => {
+  const [infoMovies, setInfoMovies] = useState<IInfoMovies[]>([])
   const [listGenres, setListGenres] = useState<IListGenres[]>([])
   const [page, setPage] = useState(1)
 
   useEffect(() => {
     const keyApi = `${process.env.NEXT_PUBLIC_API_KEY}`
+
     TmdbApi.getPopularMovies(page, keyApi)
       .then(({ data }) => {
-        setMovies(data.results)
+        setInfoMovies(data.results)
       })
-      .catch(({ error }) => {
+      .catch((error) => {
         console.log(error)
       })
 
@@ -59,7 +60,7 @@ export const MoviesContextProvider = ({ children }: IMoviesContextProps) => {
       .then(({ data }) => {
         setListGenres(data.genres)
       })
-      .catch(({ error }) => {
+      .catch((error) => {
         console.log(error)
       })
   }, [page])
@@ -75,11 +76,25 @@ export const MoviesContextProvider = ({ children }: IMoviesContextProps) => {
     ) as IListGenres[]
   }
 
-  const beforePage = () => setPage((prevState) => prevState - 1)
-  const nextPage = () => setPage((prevState) => prevState + 1)
+  const beforePage = () => {
+    setPage((prevState) => prevState - 1)
+    window.scrollTo(0, 0)
+  }
+
+  const nextPage = () => {
+    setPage((prevState) => prevState + 1)
+    window.scrollTo(0, 0)
+  }
+
   return (
     <MoviesContext.Provider
-      value={{ infoMovies, page, beforePage, nextPage, mapGenreIdsToNames }}
+      value={{
+        infoMovies,
+        page,
+        beforePage,
+        nextPage,
+        mapGenreIdsToNames,
+      }}
     >
       {children}
     </MoviesContext.Provider>
