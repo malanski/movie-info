@@ -1,41 +1,12 @@
-import { Box, Button, Grid } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-
+import { Box, Button, Flex, Grid } from '@chakra-ui/react'
 import { MovieCard } from './components/movie-card/MovieCard'
 import { SearchMovie } from './components/search-movie/SearchMovie'
-import { TmdbApi } from '@/services/api'
-
-interface IMovies {
-  adult: boolean
-  backdrop_path: string
-  genre_ids: number[]
-  id: number
-  original_language: string
-  original_title: string
-  overview: string
-  popularity: number
-  poster_path: string
-  release_date: string
-  title: string
-  video: boolean
-  vote_average: number
-  vote_count: number
-}
+import { useContext } from 'react'
+import { MoviesContext } from '@/context/MoviesContext'
 
 export const Main = () => {
-  const [page, setPage] = useState(1)
-  const [movies, setMovies] = useState<IMovies[]>([])
-
-  useEffect(() => {
-    const keyApi = `${process.env.NEXT_PUBLIC_API_KEY}`
-
-    TmdbApi.getPopularMovies(page, keyApi).then(({ data }) => {
-      setMovies(data.results)
-    })
-  }, [page])
-
-  console.log(movies)
-
+  const { infoMovies, page, beforePage, nextPage } = useContext(MoviesContext)
+  const isDisableBeforePage = page < 2
   return (
     <Box p={[4, 7, 10]}>
       <SearchMovie />
@@ -44,19 +15,23 @@ export const Main = () => {
         gap={5}
         p={[4, 8, 10]}
       >
-        {movies.map((movie) => (
+        {infoMovies.map((infoMovies) => (
           <MovieCard
-            title={movie.title}
-            imgUrl={movie.poster_path}
-            genreIds={movie.genre_ids}
-            key={movie.id}
+            title={infoMovies.title}
+            imgUrl={infoMovies.poster_path}
+            genreIds={infoMovies.genre_ids}
+            key={infoMovies.id}
+            voteAverage={0}
           />
         ))}
       </Grid>
 
-      <Button onClick={() => setPage((prevState) => prevState + 1)}>
-        Próxima página
-      </Button>
+      <Flex align="center" justifyContent="space-between" p={[2, 6, 10]}>
+        <Button isDisabled={isDisableBeforePage} onClick={beforePage}>
+          Página Anterior
+        </Button>
+        <Button onClick={nextPage}>Próxima página</Button>
+      </Flex>
     </Box>
   )
 }
