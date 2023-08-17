@@ -1,6 +1,5 @@
 import {
   Flex,
-  Card,
   Heading,
   Text,
   CircularProgress,
@@ -9,14 +8,10 @@ import {
 } from '@chakra-ui/react'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
-import {
-  AiOutlineHeart,
-  AiFillHeart,
-  AiFillStar,
-  AiOutlineOrderedList,
-} from 'react-icons/ai'
+import { AiOutlineHeart, AiFillHeart, AiFillStar } from 'react-icons/ai'
 import { BsFillBookmarkFill } from 'react-icons/bs'
 import { MoviesContext } from '@/context/MoviesContext'
+import { format } from 'date-fns'
 
 export const DetailMovie = () => {
   const { query } = useRouter()
@@ -106,7 +101,20 @@ export const DetailMovie = () => {
             <AiOutlineHeart />
             <BsFillBookmarkFill></BsFillBookmarkFill>
             <AiFillStar></AiFillStar>
-            <Text>{infoMovie?.release_date}</Text>
+
+            <Text fontWeight="bolder" color="base.yellow500" fontSize={18}>
+              Data de lançamento:{' '}
+              <Text
+                as="span"
+                fontWeight="bold"
+                color="base.gray100"
+                fontSize={16}
+              >
+                {infoMovie?.release_date
+                  ? format(new Date(infoMovie.release_date), 'dd/MM/yyyy')
+                  : 'Data de lançamento indisponível'}
+              </Text>
+            </Text>
           </Flex>
           <Flex
             p={2}
@@ -119,29 +127,36 @@ export const DetailMovie = () => {
               Conteúdo adulto: {infoMovie?.adult ? 'Sim' : 'Não'}
             </Text>
 
-            {infoMovie?.genre_ids &&
-              mapGenreIdsToNames(infoMovie?.genre_ids).map((genre) => (
-                <Text
-                  alignSelf="flex-start"
-                  fontWeight="bold"
-                  as="span"
-                  key={genre.id}
-                  p={1}
-                  borderRadius="lg"
-                  bg={`genres.${genre.id}`}
-                >
-                  {genre.name}
-                </Text>
-              ))}
+            <Flex w={'50%'} >
+              {infoMovie?.genre_ids &&
+                mapGenreIdsToNames(infoMovie?.genre_ids).map((genre) => (
+                  <Text
+                    alignSelf="flex-start"
+                    fontWeight="bold"
+                    as="span"
+                    key={genre.id}
+                    p={1}
+                    borderRadius="lg"
+                    fontSize={16}
+                    bg={`genres.${genre.id}`}
+                  >
+                    {genre.name}
+                  </Text>
+                ))}
+            </Flex>
           </Flex>
+
           <Flex>
             <Text fontWeight="bold" as="span" p="5">
-              Descrição:
+              Sinopse:
             </Text>
             <Text fontWeight="normal" as="span" p="5" maxW="800px">
-              {infoMovie?.overview}
+              {infoMovie?.overview
+                ? infoMovie.overview
+                : `Ainda não temos uma descrição e nem sinopse para o filme ${infoMovie?.title}`}
             </Text>
           </Flex>
+
           <Text p={5} alignSelf="flex-start" fontWeight="bold" as="span">
             Título original: {infoMovie?.original_title}
           </Text>

@@ -4,18 +4,19 @@ import { ChangeEvent, useContext, useState } from 'react'
 
 export const SearchMovie = () => {
   const [searchMovie, setSearchMovie] = useState('')
-  const { infoMovies, getFilterInfoMovie } = useContext(MoviesContext)
+  const { infoMovies, getFilterInfoMovie, getPopularMovies } =
+    useContext(MoviesContext)
 
   const handleSearchMovie = (event: ChangeEvent<HTMLInputElement>) => {
-    const eventTagetValue = event.target.value.toLowerCase()
-    setSearchMovie(eventTagetValue)
+    const eventTargetValue = event.target.value.toLowerCase()
+    setSearchMovie(eventTargetValue)
   }
 
   const searchInfoMovie = () => {
-    const filterInfoMovie = infoMovies.filter((movie) =>
+    const findMovie = infoMovies.filter((movie) =>
       movie.title.toLowerCase().includes(searchMovie),
     )
-    getFilterInfoMovie(filterInfoMovie)
+    getFilterInfoMovie(findMovie)
   }
 
   return (
@@ -37,6 +38,7 @@ export const SearchMovie = () => {
         size="lg"
         maxWidth="100px"
         onClick={searchInfoMovie}
+        isDisabled={searchMovie.length === 0}
         _hover={{ boxShadow: '0px 0px 30px 0px #1281c3', bg: '#1281c3' }}
       >
         Buscar

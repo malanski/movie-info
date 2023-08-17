@@ -20,6 +20,8 @@ export const Footer = () => {
           href="https://github.com/malanski"
           title="Github Profile"
           color={'background.blue500'}
+          target="_blank"
+          rel="noopener noreferrer"
           transition={'all ease-in-out 600ms'}
           _hover={{
             color: 'white',
@@ -33,6 +35,8 @@ export const Footer = () => {
           href="https://www.linkedin.com/in/ulisses-malanski/"
           title="Linkedin Profile"
           color={'background.blue500'}
+          target="_blank"
+          rel="noopener noreferrer"
           transition={'all ease-in-out 600ms'}
           _hover={{
             color: 'white',
@@ -46,6 +50,8 @@ export const Footer = () => {
           href="https://www.facebook.com/ulisses.malanski"
           title="FaceBook Profile"
           transition={'all ease-in-out 600ms'}
+          target="_blank"
+          rel="noopener noreferrer"
           color={'background.blue500'}
           _hover={{
             color: 'white',
@@ -60,6 +66,8 @@ export const Footer = () => {
           title="Instagram"
           transition={'all ease-in-out 600ms'}
           color={'background.blue500'}
+          target="_blank"
+          rel="noopener noreferrer"
           _hover={{
             color: 'white',
             transition: 'all ease-in-out 600ms',
@@ -76,6 +84,8 @@ export const Footer = () => {
           href="https://malanski.github.io/portfolio/#/projects"
           title="Meu Portfólio"
           color={'background.blue500'}
+          target="_blank"
+          rel="noopener noreferrer"
           transition={'all ease-in-out 600ms'}
           _hover={{
             color: '#0b5fe6',

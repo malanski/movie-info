@@ -27,10 +27,9 @@ interface IListGenres {
 interface IMoviesContextType {
   infoMovies: IInfoMovies[]
   page: number
-  filterInfoMovie: IInfoMovies[]
+  filterInfoMovie: IInfoMovies[] | undefined
   beforePage: () => void
   nextPage: () => void
-  getInfoMovies: (search: IInfoMovies[]) => void
   getFilterInfoMovie: (search: IInfoMovies[]) => void
   mapGenreIdsToNames: (genreIds: number[]) => IListGenres[]
 }
@@ -46,8 +45,9 @@ export const MoviesContextProvider = ({
 }: IMoviesContextProviderProps) => {
   const [infoMovies, setInfoMovies] = useState<IInfoMovies[]>([])
   const [listGenres, setListGenres] = useState<IListGenres[]>([])
-  const [filterInfoMovie, setFilterInfoMovie] = useState<IInfoMovies[]>([])
-
+  const [filterInfoMovie, setFilterInfoMovie] = useState<
+    IInfoMovies[] | undefined
+  >(undefined)
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -93,9 +93,7 @@ export const MoviesContextProvider = ({
   const getFilterInfoMovie = (search: IInfoMovies[]) => {
     setFilterInfoMovie(search)
   }
-  const getInfoMovies = (search: IInfoMovies[]) => {
-    setInfoMovies(search)
-  }
+
   return (
     <MoviesContext.Provider
       value={{
@@ -105,7 +103,6 @@ export const MoviesContextProvider = ({
         nextPage,
         mapGenreIdsToNames,
         getFilterInfoMovie,
-        getInfoMovies,
         filterInfoMovie,
       }}
     >
