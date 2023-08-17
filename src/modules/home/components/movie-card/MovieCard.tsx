@@ -1,5 +1,5 @@
 import { Flex, Card, Heading, Text } from '@chakra-ui/react'
-import { useEffect, useState, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 
 import { TmdbApi } from '@/services/api'
 import { MoviesContext } from '@/context/MoviesContext'
@@ -37,7 +37,7 @@ export const MovieCard = ({
         color="base.gray100"
         cursor="pointer"
         transition="all ease-in-out 600ms"
-        p={5}
+        p={1}
         sx={{ justifySelf: 'center', alignSelf: 'center' }}
         _hover={{
           filter: 'sepia(100%)',
@@ -47,36 +47,13 @@ export const MovieCard = ({
             transition: 'all ease-in-out 600ms',
           },
           '& > div > div > span': {
+            display: 'none',
             opacity: 0.1,
             transition: 'all ease-in-out 600ms',
           },
         }}
       >
         <Flex direction="column" gap={2}>
-          <Flex gap={3}>
-            {genreIds &&
-              mapGenreIdsToNames(genreIds)?.map((genre) => (
-                <Text
-                  fontWeight="bold"
-                  key={genre.id}
-                  as="span"
-                  opacity="0.7"
-                  bg="blue"
-                  p={1}
-                  borderRadius={5}
-                  fontSize={13}
-                  width="100%"
-                  transition="all ease-in-out 600ms"
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  {genre.name}
-                </Text>
-              ))}
-          </Flex>
           {/* <Text fontWeight="bold" color="#DAA520">
             Nota: {voteAverage}
           </Text> */}
@@ -96,6 +73,28 @@ export const MovieCard = ({
           >
             {title}
           </Heading>
+
+          <Flex gap={3}>
+            {genreIds &&
+              mapGenreIdsToNames(genreIds)?.map((genre) => (
+                <Text
+                  fontWeight="bold"
+                  key={genre.id}
+                  as="span"
+                  bg={`genres.${genre.id}`}
+                  p={0.2}
+                  borderRadius={5}
+                  fontSize={13}
+                  width="100%"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  transition="all ease-in-out 600ms"
+                >
+                  {genre.name}
+                </Text>
+              ))}
+          </Flex>
         </Flex>
       </Card>
     </Link>

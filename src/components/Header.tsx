@@ -9,7 +9,7 @@ export const Header = () => {
       justify="space-between"
       padding={6}
     >
-      <Link href={'/'}>
+      <Link href={'/'} title="home page">
         <Heading color="base.gray100" as="h1">
           Movie Catalog
         </Heading>

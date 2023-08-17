@@ -7,12 +7,15 @@ export const theme = extendTheme({
       gray200: '#D9D9D9',
       gray300: '#808080',
       gray400: '#333333',
-      gray500: '#262626',
+
       gray600: '#1A1A1A',
 
       yellow500: '#ffce1f',
     },
     background: {
+      gray500: '#262626',
+      blue500: '#4582e6',
+      blue300: '#0b5fe6',
       darkBlue: '#113b54',
       yellow: '#F7D354',
       black: '#161616',
@@ -21,7 +24,7 @@ export const theme = extendTheme({
     feedback: {
       danger: '#E25858',
     },
-    geners: {
+    genres: {
       28: '#bd1313',
       12: '#148c34',
       16: '#d1700f',

@@ -10,13 +10,19 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <CSSReset />
-      <Box bg="background.black" minHeight="100vh">
+      <Box
+        bg="background.black"
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+        minHeight="100vh"
+      >
         <MoviesContextProvider>
           <Header />
           <Component {...pageProps} />
         </MoviesContextProvider>
+        <Footer />
       </Box>
-      <Footer />
     </ChakraProvider>
   )
 }
