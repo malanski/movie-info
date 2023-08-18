@@ -1,76 +1,72 @@
 import { createContext, ReactNode, useState, useEffect } from 'react'
 
 import { TmdbApi } from '@/services/api'
-
-interface IInfoMovies {
-  adult: boolean
-  backdrop_path: string
-  genre_ids: number[]
-  id: number
-  original_language: string
-  original_title: string
-  overview: string
-  popularity: number
-  poster_path: string
-  release_date: string
-  title: string
-  video: boolean
-  vote_average: number
-  vote_count: number
-}
-
-interface IListGenres {
-  id: number
-  name: string
-}
+import { IGenre, IInfoMovies } from '@/services/api.types'
 
 interface IMoviesContextType {
   infoMovies: IInfoMovies[]
   page: number
-  filterInfoMovie: IInfoMovies[] | undefined
+  searchMovie: string
   beforePage: () => void
   nextPage: () => void
-  getFilterInfoMovie: (search: IInfoMovies[]) => void
-  mapGenreIdsToNames: (genreIds: number[]) => IListGenres[]
+  getSearchMovie: (search: string) => void
+  mapGenreIdsToNames: (genreIds: number[]) => IGenre[]
 }
-
 export const MoviesContext = createContext({} as IMoviesContextType)
 
 interface IMoviesContextProviderProps {
   children: ReactNode
 }
-
 export const MoviesContextProvider = ({
   children,
 }: IMoviesContextProviderProps) => {
   const [infoMovies, setInfoMovies] = useState<IInfoMovies[]>([])
-  const [listGenres, setListGenres] = useState<IListGenres[]>([])
-  const [filterInfoMovie, setFilterInfoMovie] = useState<
-    IInfoMovies[] | undefined
-  >(undefined)
   const [page, setPage] = useState(1)
+  const [searchMovie, setSearchMovie] = useState('')
+  const [listGenres, setListGenres] = useState<IGenre[]>([])
+
+  TmdbApi.getListGenres()
+    .then(({ data }) => {
+      setListGenres(data.genres)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 
   useEffect(() => {
-    const keyApi = `${process.env.NEXT_PUBLIC_API_KEY}`
+    if (searchMovie === '') {
+      TmdbApi.getPopularMovies(page)
+        .then(({ data }) => {
+          setInfoMovies(data.results)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      return
+    }
 
-    TmdbApi.getPopularMovies(page, keyApi)
+    TmdbApi.filterMovie(searchMovie)
       .then(({ data }) => {
-        setInfoMovies(data.results)
+        if (data.results) setInfoMovies(data.results)
       })
       .catch((error) => {
         console.log(error)
       })
+  }, [page, searchMovie])
 
-    TmdbApi.getListGenres(keyApi)
-      .then(({ data }) => {
-        setListGenres(data.genres)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }, [page])
+  const nextPage = () => {
+    setPage((prevState) => prevState + 1)
+    window.scrollTo(0, 0)
+  }
+  const beforePage = () => {
+    setPage((prevState) => prevState - 1)
+    window.scrollTo(0, 0)
+  }
 
-  const mapGenreIdsToNames = (genreIds: number[]): IListGenres[] => {
+  const getSearchMovie = (search: string) => {
+    setSearchMovie(search)
+  }
+  const mapGenreIdsToNames = (genreIds: number[]): IGenre[] => {
     const mappedGenres = genreIds.map((id) => {
       const matchedGenre = listGenres.find((genre) => genre.id === id)
       return matchedGenre || null
@@ -78,32 +74,19 @@ export const MoviesContextProvider = ({
 
     return mappedGenres.filter(
       (genre, index) => genre !== null && index < 2,
-    ) as IListGenres[]
-  }
-
-  const beforePage = () => {
-    setPage((prevState) => prevState - 1)
-    window.scrollTo(0, 0)
-  }
-
-  const nextPage = () => {
-    setPage((prevState) => prevState + 1)
-    window.scrollTo(0, 0)
-  }
-  const getFilterInfoMovie = (search: IInfoMovies[]) => {
-    setFilterInfoMovie(search)
+    ) as IGenre[]
   }
 
   return (
     <MoviesContext.Provider
       value={{
         infoMovies,
+        searchMovie,
         page,
-        beforePage,
         nextPage,
+        beforePage,
+        getSearchMovie,
         mapGenreIdsToNames,
-        getFilterInfoMovie,
-        filterInfoMovie,
       }}
     >
       {children}

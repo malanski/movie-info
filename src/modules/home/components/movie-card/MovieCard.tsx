@@ -1,10 +1,7 @@
 import { Flex, Card, Heading, Text } from '@chakra-ui/react'
 import { useContext } from 'react'
-
-import { TmdbApi } from '@/services/api'
 import { MoviesContext } from '@/context/MoviesContext'
 import Link from 'next/link'
-import { title } from 'process'
 
 interface IMovieCardProps {
   title: string
@@ -14,25 +11,19 @@ interface IMovieCardProps {
   voteAverage: number
 }
 
-export const MovieCard = ({
-  title,
-  imgUrl,
-  genreIds,
-  id,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  voteAverage,
-}: IMovieCardProps) => {
+export const MovieCard = ({ title, imgUrl, genreIds, id }: IMovieCardProps) => {
   const { mapGenreIdsToNames } = useContext(MoviesContext)
   return (
     <Link href={`/movie/${id}`}>
       <Card
         bgImage={`url(https://image.tmdb.org/t/p/w500${imgUrl})`}
+        title={`${title}`}
         bgSize="cover"
         bgPosition="center"
         textAlign="center"
         borderRadius="lg"
-        w="220px"
-        h="300px"
+        w={[280, 240, 220, 240, 270]}
+        h={[360, 320, 300, 320, 350]}
         justify="end"
         color="base.gray100"
         cursor="pointer"
@@ -53,10 +44,7 @@ export const MovieCard = ({
           },
         }}
       >
-        <Flex direction="column" gap={2}>
-          {/* <Text fontWeight="bold" color="#DAA520">
-            Nota: {voteAverage}
-          </Text> */}
+        <Flex direction="column">
           <Heading
             as="h3"
             p={1}

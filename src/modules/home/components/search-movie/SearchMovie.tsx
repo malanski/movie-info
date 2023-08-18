@@ -1,22 +1,19 @@
+import { ButtonApp } from '@/components/Button'
 import { MoviesContext } from '@/context/MoviesContext'
 import { Flex, Input, Button } from '@chakra-ui/react'
 import { ChangeEvent, useContext, useState } from 'react'
 
 export const SearchMovie = () => {
-  const [searchMovie, setSearchMovie] = useState('')
-  const { infoMovies, getFilterInfoMovie, getPopularMovies } =
-    useContext(MoviesContext)
+  const [search, setSearch] = useState('')
+  const { getSearchMovie } = useContext(MoviesContext)
 
   const handleSearchMovie = (event: ChangeEvent<HTMLInputElement>) => {
     const eventTargetValue = event.target.value.toLowerCase()
-    setSearchMovie(eventTargetValue)
+    setSearch(eventTargetValue)
   }
 
   const searchInfoMovie = () => {
-    const findMovie = infoMovies.filter((movie) =>
-      movie.title.toLowerCase().includes(searchMovie),
-    )
-    getFilterInfoMovie(findMovie)
+    getSearchMovie(search)
   }
 
   return (
@@ -32,17 +29,15 @@ export const SearchMovie = () => {
         _placeholder={{ color: 'base.gray300' }}
         onChange={handleSearchMovie}
       />
-      <Button
-        bg="background.darkBlue"
-        color="base.gray200"
-        size="lg"
-        maxWidth="100px"
+      <ButtonApp
+        background="background.yellow"
+        color="base.gray500"
+        colorHover="#ffce1f"
+        isDisabled={search.length < 3}
         onClick={searchInfoMovie}
-        isDisabled={searchMovie.length === 0}
-        _hover={{ boxShadow: '0px 0px 30px 0px #1281c3', bg: '#1281c3' }}
       >
         Buscar
-      </Button>
+      </ButtonApp>
     </Flex>
   )
 }

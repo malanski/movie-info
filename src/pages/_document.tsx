@@ -4,7 +4,9 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
-      <body>
+      <body
+        style={{ boxSizing: 'border-box', padding: '0', overflowX: 'hidden' }}
+      >
         <Main />
         <NextScript />
       </body>

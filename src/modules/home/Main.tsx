@@ -1,54 +1,61 @@
-import { Box, Button, Grid, Flex, Skeleton, Text } from '@chakra-ui/react'
+import { Box, Grid, Flex, Skeleton, Text, Center } from '@chakra-ui/react'
 import { useContext } from 'react'
 
 import { MovieCard } from './components/movie-card/MovieCard'
 import { SearchMovie } from './components/search-movie/SearchMovie'
 import { MoviesContext } from '@/context/MoviesContext'
+import { ButtonApp } from '@/components/Button'
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
 
 export const Main = () => {
-  const { infoMovies, page, beforePage, nextPage, filterInfoMovie } =
-    useContext(MoviesContext)
+  const {
+    infoMovies,
+    page,
+    beforePage,
+    nextPage,
+    searchMovie,
+    getSearchMovie,
+  } = useContext(MoviesContext)
 
   const amountLoadingCard = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   const isDisabledBeforePage = page < 2
+  const search = ''
 
   return (
     <Box p={[4, 7, 10]}>
       <SearchMovie />
       <Grid
         templateColumns="repeat(auto-fit, minmax(220px, 1fr))"
-        gap={5}
-        p={[4, 8, 10]}
+        gap={[5, 10]}
+        padding={[4, 8, 10]}
+        minHeight={250}
+        maxWidth={1500}
+        alignItems="center"
+        margin="auto"
+        justifyItems="center"
       >
-        {infoMovies.length > 0 && !filterInfoMovie ? (
-          infoMovies.map((infoMovie) => (
-            <MovieCard
-              title={infoMovie.title}
-              imgUrl={infoMovie.poster_path}
-              genreIds={infoMovie.genre_ids}
-              id={infoMovie.id}
-              key={infoMovie.id}
-              voteAverage={infoMovie.vote_average}
-            />
-          ))
-        ) : filterInfoMovie && filterInfoMovie.length > 0 ? (
-          filterInfoMovie.map((infoMovie) => (
-            <MovieCard
-              title={infoMovie.title}
-              imgUrl={infoMovie.poster_path}
-              genreIds={infoMovie.genre_ids}
-              id={infoMovie.id}
-              key={infoMovie.id}
-              voteAverage={infoMovie.vote_average}
-            />
-          ))
-        ) : filterInfoMovie && filterInfoMovie.length < 1 ? (
-          <Text color="feedback.danger">Filme não encontrado.</Text>
-        ) : (
+        {infoMovies.length > 0 ? (
+          infoMovies.map((infoMovie) => {
+            if (infoMovie.poster_path) {
+              return (
+                <MovieCard
+                  title={infoMovie.title}
+                  imgUrl={infoMovie.poster_path}
+                  genreIds={infoMovie.genre_ids}
+                  id={infoMovie.id}
+                  key={infoMovie.id}
+                  voteAverage={infoMovie.vote_average}
+                />
+              )
+            } else {
+              return null // ou return undefined;
+            }
+          })
+        ) : infoMovies?.length === 0 && searchMovie === '' ? (
           amountLoadingCard.map((number) => (
             <Skeleton
-              w="220px"
-              h="300px"
+              w={[280, 240, 220, 240, 270]}
+              h={[360, 320, 300, 320, 350]}
               startColor="background.yellow"
               endColor="base.gray200"
               fadeDuration={1}
@@ -57,39 +64,53 @@ export const Main = () => {
               key={number}
             />
           ))
+        ) : (
+          <Text
+            color="feedback.danger"
+            fontSize={30}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            Filme não encontrado
+          </Text>
         )}
       </Grid>
-      {infoMovies.length > 0 && !filterInfoMovie && (
-        <Flex align="center" justify="space-between" p={[2, 6, 10]}>
-          <Button
-            isDisabled={isDisabledBeforePage}
-            onClick={beforePage}
-            bg="background.yellow"
-            color="base.gray500"
-            padding="1rem 1.7rem"
-            _hover={{
-              bg: '#ffce1f',
-              fontWeight: 'bolder',
-              letterSpacing: '1px',
-            }}
-          >
-            Página anterior
-          </Button>
 
-          <Button
-            onClick={nextPage}
-            bg="background.yellow"
+      {infoMovies.length > 0 && searchMovie === '' ? (
+        <Flex align="center" justify="space-between" p={[2, 6, 10]}>
+          <ButtonApp
+            background="background.yellow"
             color="base.gray500"
-            padding="1rem 1.7rem"
-            _hover={{
-              bg: '#ffce1f',
-              fontWeight: 'bolder',
-              letterSpacing: '1px',
-            }}
+            onClick={beforePage}
+            colorHover="#ffce1f"
+            isDisabled={isDisabledBeforePage}
           >
-            Próxima página
-          </Button>
+            <AiOutlineArrowLeft />
+            Anterior
+          </ButtonApp>
+
+          <ButtonApp
+            background="background.yellow"
+            color="base.gray500"
+            onClick={nextPage}
+            colorHover="#ffce1f"
+          >
+            Próxima
+            <AiOutlineArrowRight />
+          </ButtonApp>
         </Flex>
+      ) : (
+        <Center>
+          <ButtonApp
+            background="background.yellow"
+            color="base.gray500"
+            onClick={() => getSearchMovie(search)}
+            colorHover="#ffce1f"
+          >
+            Catálogo Inicial
+          </ButtonApp>
+        </Center>
       )}
     </Box>
   )

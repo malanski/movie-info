@@ -1,184 +1,260 @@
 import {
-  Flex,
   Heading,
   Text,
   CircularProgress,
-  Button,
+  Center,
+  Flex,
   Box,
 } from '@chakra-ui/react'
-import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
-import { AiOutlineHeart, AiFillHeart, AiFillStar } from 'react-icons/ai'
-import { BsFillBookmarkFill } from 'react-icons/bs'
-import { MoviesContext } from '@/context/MoviesContext'
 import { format } from 'date-fns'
+import { IMovieDetailsInfo } from '@/services/api.types'
+
+import {
+  AiOutlineHeart,
+  AiFillHeart,
+  AiFillStar,
+  AiOutlineArrowLeft,
+} from 'react-icons/ai'
+import { BsFillBookmarkFill } from 'react-icons/bs'
+import Link from 'next/link'
+import { ButtonApp } from '@/components/Button'
+import Head from 'next/head'
+import Image from 'next/image'
+import { TmdbApi } from '@/services/api'
+import { useState } from 'react'
 
 export const DetailMovie = () => {
   const { query } = useRouter()
-  const { infoMovies, mapGenreIdsToNames } = useContext(MoviesContext)
+  const [movieDetailsInfo, setMovieDetailsInfo] = useState<IMovieDetailsInfo>()
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   const queryId =
     typeof query.id === 'string' ? parseInt(query.id, 10) : undefined
 
-  const infoMovie = infoMovies.find((infoMovie) => infoMovie.id === queryId)
-  const progressValue = infoMovie?.vote_average
-    ? infoMovie.vote_average * 10
+  if (typeof queryId === 'number') {
+    TmdbApi.getMovie(queryId).then(({ data }) => setMovieDetailsInfo(data))
+  }
+  const progressValue = movieDetailsInfo?.vote_average
+    ? movieDetailsInfo.vote_average * 10
     : 0
 
   const imageUrls = [
-    `url(https://image.tmdb.org/t/p/w500/${infoMovie?.poster_path})`,
-    `url(https://image.tmdb.org/t/p/w500/${infoMovie?.backdrop_path})`,
+    `https://image.tmdb.org/t/p/w500/${movieDetailsInfo?.poster_path}`,
+    `https://image.tmdb.org/t/p/w500/${movieDetailsInfo?.backdrop_path}`,
   ]
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const handleImageClick = () => {
     const nextIndex = (currentImageIndex + 1) % imageUrls.length
     setCurrentImageIndex(nextIndex)
   }
 
   return (
-    <Flex direction="column" p="5">
-      <Flex justifyContent="space-between" width="100%">
-        <Button>Previous</Button>
-        <Button>Next</Button>
-      </Flex>
-
-      <Flex>
+    <>
+      <Head>
+        <title>{movieDetailsInfo?.title}</title>
+      </Head>
+      <Box position="relative">
         <Flex
+          p={[2, 4, 8]}
           wrap="nowrap"
-          justifyContent="space-between"
+          flexDirection={['column', 'column', 'column', 'column', 'row']}
+          justify={['center', 'center', 'space-between']}
           alignItems="center"
-          w="30%"
         >
-          <Box
-            sx={{
-              width: '400px',
-              height: '400px',
-              perspective: '1000px',
-              transition: 'transform 0.6s ease',
-              transform: currentImageIndex === 1 ? 'rotateY(360deg)' : 'none',
-            }}
-            bgImage={imageUrls[currentImageIndex]}
-            fontWeight="bold"
-            p={5}
-            m={2}
-            bgSize="auto 100%"
-            bgRepeat="no-repeat"
-            bgPosition="center"
-            title="Poster do filme"
-            onClick={handleImageClick}
-          ></Box>
-        </Flex>
-
-        <Flex
-          direction="column"
-          color="white"
-          alignItems="center"
-          w="70%"
-          p={5}
-        >
-          <Heading fontWeight="bold" as="h1" textAlign="center" m={2}>
-            {infoMovie?.title}
-          </Heading>
           <Flex
-            justifyContent="space-between"
+            w={['100%', '70%', '80%', '30%']}
+            justifyContent="center"
             alignItems="center"
-            width="100%"
-            p={5}
           >
-            <CircularProgress value={progressValue}>
-              <Text
-                position="absolute"
-                top="50%"
-                left="50%"
-                transform="translate(-50%, -50%)"
-                fontSize="md"
-                fontWeight="bold"
-              >
-                <big>{progressValue}</big>
-                <small>%</small>
-              </Text>
-            </CircularProgress>
-            <AiOutlineHeart />
-            <BsFillBookmarkFill></BsFillBookmarkFill>
-            <AiFillStar></AiFillStar>
+            <Image
+              onClick={handleImageClick}
+              title={`Imagens do filme ${movieDetailsInfo?.title}`}
+              alt={`Imagens do filme ${movieDetailsInfo?.title}`}
+              src={imageUrls[currentImageIndex]}
+              style={{
+                perspective: '1000px',
+                margin: '2px',
+                transition: 'transform 0.6s ease',
+                transform: currentImageIndex === 1 ? 'rotateY(360deg)' : 'none',
+              }}
+              width={400}
+              height={400}
+            ></Image>
+          </Flex>
 
-            <Text fontWeight="bolder" color="base.yellow500" fontSize={18}>
-              Data de lançamento:{' '}
+          <Flex
+            display={['column', 'column', 'column', 'row']}
+            alignItems="center"
+            w={['100%', '100%', '100%', '70%']}
+            color="white"
+            p={[2, 4, 8]}
+          >
+            <Heading
+              as="h1"
+              fontWeight="bold"
+              textAlign={['left', 'center', 'center', 'right']}
+              m={2}
+              p={5}
+              fontSize={['lg', 'lg', 'lg', '25px', '35px']}
+            >
+              {movieDetailsInfo?.title}
+            </Heading>
+            <Text
+              as="span"
+              p={5}
+              m={2}
+              alignSelf="flex-start"
+              textAlign={['left', 'left', 'center', 'left']}
+              fontSize={['md', 'lg', 'lg', '19px', '23px']}
+              fontWeight="bold"
+            >
+              <small>Título original:</small>{' '}
+              <i>{movieDetailsInfo?.original_title}</i>
+            </Text>
+
+            <Flex
+              wrap="wrap"
+              justifyContent="space-between"
+              alignItems="center"
+              width="100%"
+              p={5}
+            >
+              <CircularProgress value={progressValue}>
+                <Text
+                  position="absolute"
+                  top="50%"
+                  left="50%"
+                  transform="translate(-50%, -50%)"
+                  fontSize="md"
+                  fontWeight="bold"
+                >
+                  {Math.floor(progressValue)}
+                </Text>
+              </CircularProgress>
+
+              <AiFillStar></AiFillStar>
+              <Text
+                p={2}
+                fontWeight="bolder"
+                color="base.yellow500"
+                fontSize={18}
+              >
+                Estreia:&ensp;
+                <Text
+                  as="span"
+                  fontWeight="bold"
+                  color="base.gray100"
+                  fontSize={16}
+                >
+                  {movieDetailsInfo?.release_date
+                    ? format(
+                        new Date(movieDetailsInfo.release_date),
+                        'dd/MM/yyyy',
+                      )
+                    : 'Data de estreia indisponível'}
+                </Text>
+              </Text>
+            </Flex>
+            <Flex
+              wrap="wrap"
+              justifyContent="space-between"
+              w="100%"
+              p={2}
+              border="2px solid white"
+              borderRadius="lg"
+              marginBottom={['1', '2', '4', '8', '8']}
+            >
+              <Text as="span" alignSelf="flex-start" fontWeight="bold">
+                Conteúdo adulto: {movieDetailsInfo?.adult ? 'Sim' : 'Não'}
+              </Text>
+              <Flex alignSelf="end" gap={2} wrap="wrap">
+                {movieDetailsInfo?.genres.map((genre, index) => {
+                  if (index < 5) {
+                    return (
+                      <Text
+                        as="span"
+                        key={genre.id}
+                        bg={`genres.${genre.id}`}
+                        p={1}
+                        borderRadius="lg"
+                        fontSize={16}
+                        alignSelf="flex-start"
+                        fontWeight="bold"
+                      >
+                        {genre.name}
+                      </Text>
+                    )
+                  }
+                  return null
+                })}
+              </Flex>
+            </Flex>
+            <Flex
+              as="span"
+              w="100%"
+              p={1}
+              alignSelf="flex-start"
+              justifyContent="space-between"
+              fontWeight="bold"
+              border="2px solid white"
+              borderRadius="lg"
+            >
               <Text
                 as="span"
+                p={2}
                 fontWeight="bold"
-                color="base.gray100"
-                fontSize={16}
+                display="flex"
+                alignItems="center"
+                title="Popularidade"
               >
-                {infoMovie?.release_date
-                  ? format(new Date(infoMovie.release_date), 'dd/MM/yyyy')
-                  : 'Data de lançamento indisponível'}
+                <AiOutlineHeart />
+                &ensp; {movieDetailsInfo?.popularity}
               </Text>
-            </Text>
-          </Flex>
-          <Flex
-            p={2}
-            justifyContent="space-between"
-            w="100%"
-            border="2px solid white"
-            borderRadius="lg"
-          >
-            <Text alignSelf="flex-start" fontWeight="bold" as="span">
-              Conteúdo adulto: {infoMovie?.adult ? 'Sim' : 'Não'}
-            </Text>
+              <Text
+                as="span"
+                p={2}
+                alignSelf="flex-start"
+                display="flex"
+                alignItems="center"
+                fontWeight="bold"
+                title="Média de votos"
+              >
+                <BsFillBookmarkFill></BsFillBookmarkFill>&ensp;
+                {movieDetailsInfo?.vote_average}
+              </Text>
+            </Flex>
 
-            <Flex w={'50%'} >
-              {infoMovie?.genre_ids &&
-                mapGenreIdsToNames(infoMovie?.genre_ids).map((genre) => (
-                  <Text
-                    alignSelf="flex-start"
-                    fontWeight="bold"
-                    as="span"
-                    key={genre.id}
-                    p={1}
-                    borderRadius="lg"
-                    fontSize={16}
-                    bg={`genres.${genre.id}`}
-                  >
-                    {genre.name}
-                  </Text>
-                ))}
+            <Flex
+              marginTop={['1', '2', '4', '8', '16']}
+              background="base.black600"
+            >
+              <Text as="span" fontWeight="bold" p="5">
+                Sinopse:
+              </Text>
+              <Text as="span" fontWeight="normal" p="5" maxW="800px">
+                {movieDetailsInfo?.overview
+                  ? movieDetailsInfo.overview
+                  : `Desculpe, a sinopse do filme ${movieDetailsInfo?.title} não foi encontrada`}
+              </Text>
             </Flex>
           </Flex>
-
-          <Flex>
-            <Text fontWeight="bold" as="span" p="5">
-              Sinopse:
-            </Text>
-            <Text fontWeight="normal" as="span" p="5" maxW="800px">
-              {infoMovie?.overview
-                ? infoMovie.overview
-                : `Ainda não temos uma descrição e nem sinopse para o filme ${infoMovie?.title}`}
-            </Text>
-          </Flex>
-
-          <Text p={5} alignSelf="flex-start" fontWeight="bold" as="span">
-            Título original: {infoMovie?.original_title}
-          </Text>
-          <Flex
-            justifyContent="space-between"
-            w="100%"
-            p={1}
-            alignSelf="flex-start"
-            fontWeight="bold"
-            as="span"
-            border="2px solid white"
-            borderRadius="lg"
-          >
-            <Text p={2} alignSelf="flex-start" fontWeight="bold" as="span">
-              Popularidade: {infoMovie?.popularity}
-            </Text>
-            <Text p={2} alignSelf="flex-start" fontWeight="bold" as="span">
-              Votos: {infoMovie?.vote_average}
-            </Text>
-          </Flex>
         </Flex>
-      </Flex>
-    </Flex>
+
+        <Center marginBottom={[2, 5, 10]} p={[6, 3, 0]}>
+          <Link href="/">
+            <ButtonApp
+              background="background.yellow"
+              color="base.gray500"
+              colorHover="#ffce1f"
+            >
+              <Flex justifyContent="space-between" w="100%" alignItems="center">
+                <AiOutlineArrowLeft />
+                <Text as="span">Voltar</Text>
+              </Flex>
+            </ButtonApp>
+          </Link>
+        </Center>
+      </Box>
+    </>
   )
 }

@@ -5,10 +5,14 @@ import { theme } from '@/themes'
 import { Header } from '@/components/Header'
 import { MoviesContextProvider } from '@/context/MoviesContext'
 import { Footer } from '@/components/Footer'
+import Head from 'next/head'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
+      <Head>
+        <title>Home Catalog</title>
+      </Head>
       <CSSReset />
       <Box
         bg="background.black"
