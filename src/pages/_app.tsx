@@ -1,18 +1,14 @@
 import { ChakraProvider, CSSReset, Box } from '@chakra-ui/react'
-import type { AppProps } from 'next/app'
 
 import { theme } from '@/themes'
 import { Header } from '@/components/Header'
-import { MoviesContextProvider } from '@/context/MoviesContext'
 import { Footer } from '@/components/Footer'
-import Head from 'next/head'
+
+import type { AppProps } from 'next/app'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
-      <Head>
-        <title>Filmes Populares</title>
-      </Head>
       <CSSReset />
       <Box
         bg="background.black"
@@ -21,10 +17,8 @@ export default function App({ Component, pageProps }: AppProps) {
         justifyContent="space-between"
         minHeight="100vh"
       >
-        <MoviesContextProvider>
-          <Header />
-          <Component {...pageProps} />
-        </MoviesContextProvider>
+        <Header />
+        <Component {...pageProps} />
         <Footer />
       </Box>
     </ChakraProvider>
