@@ -42,7 +42,7 @@ export const Header = () => {
         flexDirection={['column-reverse', 'row', 'row', 'row']}
         width={['100%']}
       >
-        <Link href={'/'}>
+        <Link href={'/'} title="Página inicial">
           <Flex align="center" justify="start" gap={2}>
             <BiCameraMovie size={40} color="#ffce1f" />
             <Heading color="base.yellow500" as="h1" fontSize={[20, 25, 40]}>
@@ -58,10 +58,11 @@ export const Header = () => {
             onClick={handleLoginClick}
             isLoading={isLoading}
             colorHover="#ffce1f"
+            title="Entrar"
           >
             <Image src={popcorn} alt="popcorn icon" width={20}></Image>
             <Text as="span" color="background.white">
-              Entrar
+              Login
             </Text>
           </ButtonApp>
         </Flex>

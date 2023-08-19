@@ -5,7 +5,11 @@ export default function Document() {
     <Html lang="en">
       <Head />
       <body
-        style={{ boxSizing: 'border-box', padding: '0', overflowX: 'hidden' }}
+        style={{
+          boxSizing: 'border-box',
+          padding: '0',
+          overflowX: 'hidden',
+        }}
       >
         <Main />
         <NextScript />

@@ -10,7 +10,13 @@ import { useRouter } from 'next/router'
 import { format } from 'date-fns'
 import { IMovieDetailsInfo } from '@/services/api.types'
 
-import { AiOutlineHeart, AiFillStar, AiOutlineArrowLeft } from 'react-icons/ai'
+import {
+  AiOutlineHeart,
+  AiFillStar,
+  AiOutlineArrowLeft,
+  AiOutlineArrowUp,
+  AiOutlineArrowDown,
+} from 'react-icons/ai'
 import { BsFillBookmarkFill } from 'react-icons/bs'
 import { CiTimer } from 'react-icons/ci'
 import { FaEarthAfrica, FaHandHoldingDollar } from 'react-icons/fa6'
@@ -46,6 +52,15 @@ export const DetailMovie = () => {
     setCurrentImageIndex(nextIndex)
   }
 
+  // function formatToUSD(budget: number): string {
+  //   return budget.toLocaleString('en-US', {
+  //     style: 'currency',
+  //     currency: 'USD',
+  //   })
+  // }
+
+  // const formattedAmount = formatToUSD(movieDetailsInfo?.budget)
+
   return (
     <>
       <Head>
@@ -53,9 +68,9 @@ export const DetailMovie = () => {
       </Head>
       <Box position="relative">
         <Flex
-          p={['1', '2', '4', '8']}
+          p={['0', '2', '2', '4']}
           minH="90vh"
-          width="100vw"
+          // width="100vw"
           wrap="nowrap"
           flexDirection={['column', 'column', 'column', 'row', 'row']}
           justify={['center', 'center', 'space-between']}
@@ -63,14 +78,17 @@ export const DetailMovie = () => {
         >
           <Flex
             w={['100%', '70%', '80%', '30%']}
-            justifyContent="center"
+            h={['100%']}
+            justifyContent="space-between"
             alignItems="center"
+            flexDirection={['column-reverse', 'column']}
           >
             <Image
               onClick={handleImageClick}
               title={`Imagens do filme ${movieDetailsInfo?.title}`}
               alt={`Imagens do filme ${movieDetailsInfo?.title}`}
               src={imageUrls[currentImageIndex]}
+              priority
               style={{
                 perspective: '1000px',
                 margin: '2px',
@@ -80,6 +98,19 @@ export const DetailMovie = () => {
               width={400}
               height={400}
             ></Image>
+
+            <Center margin={['2', '4', '8']} p={[6, 3, 0]}>
+              <Link href="/" title="Retornar à pesquisa anterior">
+                <ButtonApp
+                  background="background.yellow"
+                  color="base.gray500"
+                  colorHover="#ffce1f"
+                >
+                  <AiOutlineArrowLeft />
+                  <Text as="span">Voltar</Text>
+                </ButtonApp>
+              </Link>
+            </Center>
           </Flex>
 
           <Flex
@@ -99,6 +130,7 @@ export const DetailMovie = () => {
             >
               {movieDetailsInfo?.title}
             </Heading>
+
             <Text
               as="span"
               p={5}
@@ -159,6 +191,7 @@ export const DetailMovie = () => {
                 </Text>
               </Text>
             </Flex>
+
             <Flex
               wrap="wrap"
               justifyContent="space-between"
@@ -170,15 +203,20 @@ export const DetailMovie = () => {
               marginBottom={['1', '2', '4', '8', '8']}
               flexDirection={['column-reverse', 'column-reverse', 'row', 'row']}
             >
-              <Text as="span" p={1} alignSelf="flex-start" fontWeight="bold">
+              <Text
+                as="span"
+                p={1}
+                alignSelf={['start', 'center', 'end']}
+                fontWeight="bold"
+              >
                 Conteúdo adulto: {movieDetailsInfo?.adult ? 'Sim' : 'Não'}
               </Text>
 
               <Flex
                 gap={2}
                 wrap={['wrap', 'nowrap', 'wrap']}
-                alignSelf={['center', 'center', 'flex-start']}
-                justifyContent={['center', 'center', 'space-between']}
+                alignSelf={['end', 'center', 'end']}
+                justifyContent={['end', 'center', 'end']}
                 width="70%"
               >
                 {movieDetailsInfo?.genres.map((genre, index) => {
@@ -186,11 +224,11 @@ export const DetailMovie = () => {
                     return (
                       <Text
                         as="span"
-                        key={genre.id}
-                        bg={`genres.${genre.id}`}
                         p={1}
                         borderRadius="lg"
                         fontSize={16}
+                        bg={`genres.${genre.id}`}
+                        key={genre.id}
                       >
                         {genre.name}
                       </Text>
@@ -205,6 +243,7 @@ export const DetailMovie = () => {
               as="span"
               w="100%"
               p={1}
+              marginTop={['4px']}
               alignSelf="flex-start"
               justifyContent="space-between"
               fontWeight="bold"
@@ -217,38 +256,45 @@ export const DetailMovie = () => {
                 fontWeight="bold"
                 display="flex"
                 alignItems="center"
+                flexDirection={['column', 'row']}
                 title="Popularidade"
               >
                 <AiOutlineHeart />
                 &ensp; {movieDetailsInfo?.popularity}
               </Text>
+
               <Text
                 as="span"
                 p={2}
-                alignSelf="flex-start"
+                fontWeight="bold"
                 display="flex"
                 alignItems="center"
-                fontWeight="bold"
+                flexDirection={['column', 'row']}
                 title="Contagem de votos"
               >
-                <FaVoteYea></FaVoteYea>&ensp;
-                {movieDetailsInfo?.vote_count}&ensp;Votos
+                <FaVoteYea></FaVoteYea>
+                {movieDetailsInfo?.vote_count}
               </Text>
+
               <Text
                 as="span"
                 p={2}
-                alignSelf="flex-start"
+                fontWeight="bold"
                 display="flex"
                 alignItems="center"
-                fontWeight="bold"
+                flexDirection={['column', 'row']}
                 title="Média de votos"
               >
-                <BsFillBookmarkFill></BsFillBookmarkFill>&ensp;
+                <BsFillBookmarkFill></BsFillBookmarkFill>
                 {movieDetailsInfo?.vote_average}
               </Text>
             </Flex>
 
-            <Flex marginTop={['1', '2', '4', '8']} background="base.black600">
+            <Flex
+              marginTop={['1', '2', '4', '8']}
+              background="base.black600"
+              flexDirection={['column', 'row']}
+            >
               <Text as="span" fontWeight="bold" p="5">
                 Sinopse:
               </Text>
@@ -384,19 +430,21 @@ export const DetailMovie = () => {
 
             <Flex justifyContent="space-between">
               <Text
-                as="span"
                 p={2}
                 alignSelf="flex-start"
                 display="flex"
                 alignItems="center"
+                flexDirection={['column', 'row']}
                 fontWeight="bold"
-                title={`Rendimento de ${movieDetailsInfo?.title} em dólares americanos`}
                 color="green"
-                fontSize="22px"
+                title={`Rendimento de ${movieDetailsInfo?.title} em dólares americanos`}
               >
-                <FaHandHoldingDollar></FaHandHoldingDollar>
-                &ensp;Rendimento:&ensp;
-                {movieDetailsInfo?.revenue}&ensp;USD
+                <FaRegMoneyBillAlt></FaRegMoneyBillAlt>&ensp;
+                {/* <Text as="span">&ensp;Orçamento:&ensp;</Text> */}
+                {movieDetailsInfo?.revenue
+                  ? movieDetailsInfo?.revenue + ' USD'
+                  : `Desconhecido.`}
+                <AiOutlineArrowUp></AiOutlineArrowUp>
               </Text>
 
               <Text
@@ -404,15 +452,17 @@ export const DetailMovie = () => {
                 alignSelf="flex-start"
                 display="flex"
                 alignItems="center"
+                flexDirection={['column', 'row']}
                 fontWeight="bold"
                 color="orange"
                 title={`Orçamento de ${movieDetailsInfo?.title} em dólares americanos`}
               >
-                <FaRegMoneyBillAlt></FaRegMoneyBillAlt>
-                <Text as="span">&ensp;Orçamento:&ensp;</Text>
+                <FaRegMoneyBillAlt></FaRegMoneyBillAlt>&ensp;
+                {/* <Text as="span">&ensp;Orçamento:&ensp;</Text> */}
                 {movieDetailsInfo?.budget
-                  ? movieDetailsInfo?.budget
+                  ? movieDetailsInfo?.budget + ' USD'
                   : `Desconhecido.`}
+                <AiOutlineArrowDown></AiOutlineArrowDown>
               </Text>
             </Flex>
 
@@ -450,19 +500,6 @@ export const DetailMovie = () => {
             </Box> */}
           </Flex>
         </Flex>
-
-        <Center marginBottom={[2, 5, 10]} p={[6, 3, 0]}>
-          <Link href="/">
-            <ButtonApp
-              background="background.yellow"
-              color="base.gray500"
-              colorHover="#ffce1f"
-            >
-              <AiOutlineArrowLeft />
-              <Text as="span">Voltar</Text>
-            </ButtonApp>
-          </Link>
-        </Center>
       </Box>
     </>
   )
