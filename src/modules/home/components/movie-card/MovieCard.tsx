@@ -22,8 +22,8 @@ export const MovieCard = ({ title, imgUrl, genreIds, id }: IMovieCardProps) => {
         bgPosition="center"
         textAlign="center"
         borderRadius="lg"
-        w={[280, 240, 220, 240, 270]}
-        h={[360, 320, 300, 320, 350]}
+        w={[280, 280, 220, 240, 270]}
+        h={[360, 390, 300, 320, 350]}
         justify="end"
         color="base.gray100"
         cursor="pointer"

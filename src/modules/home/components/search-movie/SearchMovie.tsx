@@ -2,6 +2,7 @@ import { ButtonApp } from '@/components/Button'
 import { MoviesContext } from '@/context/MoviesContext'
 import { Flex, Input, Button } from '@chakra-ui/react'
 import { ChangeEvent, useContext, useState } from 'react'
+import { AiOutlineSearch } from 'react-icons/ai'
 
 export const SearchMovie = () => {
   const [search, setSearch] = useState('')
@@ -36,6 +37,7 @@ export const SearchMovie = () => {
         isDisabled={search.length < 3}
         onClick={searchInfoMovie}
       >
+        <AiOutlineSearch />
         Buscar
       </ButtonApp>
     </Flex>

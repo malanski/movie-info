@@ -1,9 +1,18 @@
 import { useState } from 'react'
-import { Flex, Button, Heading, Alert, AlertIcon } from '@chakra-ui/react'
+import {
+  Button,
+  Heading,
+  Alert,
+  AlertIcon,
+  Link,
+  Text,
+  Box,
+  Flex,
+} from '@chakra-ui/react'
 import { BiCameraMovie } from 'react-icons/bi'
-import Link from 'next/link'
-
+import popcorn from 'public/android-chrome-192x192.png'
 import { ButtonApp } from './Button'
+import Image from 'next/image'
 
 export const Header = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -29,25 +38,33 @@ export const Header = () => {
         justify="space-between"
         padding={6}
         gap={3}
+        wrap={['wrap']}
+        flexDirection={['column-reverse', 'row', 'row', 'row']}
+        width={['100%']}
       >
         <Link href={'/'}>
           <Flex align="center" justify="start" gap={2}>
             <BiCameraMovie size={40} color="#ffce1f" />
             <Heading color="base.yellow500" as="h1" fontSize={[20, 25, 40]}>
-              Movie Catalog
+              Movie Info
             </Heading>
           </Flex>
         </Link>
 
-        <ButtonApp
-          background="background.yellow"
-          color="base.gray500"
-          onClick={handleLoginClick}
-          isLoading={isLoading}
-          colorHover="#ffce1f"
-        >
-          Entrar
-        </ButtonApp>
+        <Flex>
+          <ButtonApp
+            background="background.darkBlue"
+            color="base.gray500"
+            onClick={handleLoginClick}
+            isLoading={isLoading}
+            colorHover="#ffce1f"
+          >
+            <Image src={popcorn} alt="popcorn icon" width={20}></Image>
+            <Text as="span" color="background.white">
+              Entrar
+            </Text>
+          </ButtonApp>
+        </Flex>
       </Flex>
 
       {showAlert && (

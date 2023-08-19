@@ -30,7 +30,7 @@ interface ISpokenLanguage {
 export interface IMovieDetailsInfo {
   adult: boolean
   backdrop_path: string
-  belongs_to_collection: IBelongsToCollection
+  belongs_to_collection: IBelongsToCollection[]
   budget: number
   genres: IGenre[]
   homepage: string

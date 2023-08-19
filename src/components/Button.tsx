@@ -24,12 +24,15 @@ export const ButtonApp = ({
       bg={background}
       color={color}
       padding="1rem 2rem"
-      size="lg"
+      // size="lg"
       isLoading={isLoading}
       isDisabled={isDisabled}
-      display="flex"
-      justifyContent="space-between"
-      alignItems="center"
+      width='200px'
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
       _hover={{
         transform: 'scale(1.05)',
         boxShadow: `0px 0px 30px 0px ${colorHover}`,

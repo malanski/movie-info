@@ -11,7 +11,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <Head>
-        <title>Home Catalog</title>
+        <title>Filmes Populares</title>
       </Head>
       <CSSReset />
       <Box
