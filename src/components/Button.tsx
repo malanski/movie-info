@@ -8,6 +8,7 @@ interface IButtonAppProps {
   isDisabled?: boolean
   children: React.ReactNode
   onClick?: () => void
+  title: string
 }
 
 export const ButtonApp = ({
@@ -18,6 +19,7 @@ export const ButtonApp = ({
   colorHover,
   isDisabled,
   children,
+  title,
 }: IButtonAppProps) => {
   return (
     <Button
@@ -27,7 +29,8 @@ export const ButtonApp = ({
       // size="lg"
       isLoading={isLoading}
       isDisabled={isDisabled}
-      width='200px'
+      width="200px"
+      title={title}
       sx={{
         display: 'flex',
         justifyContent: 'space-between',

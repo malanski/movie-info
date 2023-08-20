@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import {
-  Button,
   Heading,
   Alert,
   AlertIcon,
@@ -9,8 +8,8 @@ import {
   Box,
   Flex,
 } from '@chakra-ui/react'
-import { BiCameraMovie } from 'react-icons/bi'
 import popcorn from 'public/android-chrome-192x192.png'
+import movieLogo from 'public/movielogo.png'
 import { ButtonApp } from './Button'
 import Image from 'next/image'
 
@@ -36,6 +35,7 @@ export const Header = () => {
         bg="background.gray900"
         align="center"
         justify="space-between"
+        alignItems="center"
         padding={6}
         gap={3}
         wrap={['wrap']}
@@ -43,9 +43,11 @@ export const Header = () => {
         width={['100%']}
       >
         <Link href={'/'} title="Página inicial">
-          <Flex align="center" justify="start" gap={2}>
-            <BiCameraMovie size={40} color="#ffce1f" />
-            <Heading color="base.yellow500" as="h1" fontSize={[20, 25, 40]}>
+          <Flex align="center" justify="start" gap={2} borderRadius="10px">
+            <Box borderRadius="50%" bgColor="white" p={1}>
+              <Image src={movieLogo} alt="Movie Logo" width={40}></Image>
+            </Box>
+            <Heading color="base.red" as="h1" fontSize={[20, 25, 40]}>
               Movie Info
             </Heading>
           </Flex>
@@ -53,7 +55,7 @@ export const Header = () => {
 
         <Flex>
           <ButtonApp
-            background="background.darkBlue"
+            background="background.red"
             color="base.gray500"
             onClick={handleLoginClick}
             isLoading={isLoading}

@@ -21,7 +21,7 @@ const MyBox = ({ myHref, myTitle, children }: MyBoxProps) => {
       rel="noopener noreferrer"
       transition={'all ease-in-out 600ms'}
       _hover={{
-        color: 'white',
+        color: 'yellow',
         transition: 'all ease-in-out 600ms',
       }}
     >
@@ -34,37 +34,40 @@ export const Footer = () => {
   return (
     <Box fontSize={25}>
       <Flex
-        bg="background.darkBlue"
+        bg="background.red"
         align="center"
         justify="space-between"
         padding={6}
       >
-        <MyBox myHref="https://github.com/malanski" myTitle="Github Profile">
+        <MyBox
+          myHref="https://github.com/malanski"
+          myTitle="Ulisses Malanski no Github"
+        >
           <AiFillGithub />
         </MyBox>
 
         <MyBox
           myHref="https://www.linkedin.com/in/ulisses-malanski/"
-          myTitle="Linkedin Profile"
+          myTitle="Ulisses Malanski no Linkedin"
         >
           <AiFillLinkedin />
         </MyBox>
 
         <MyBox
           myHref="https://www.facebook.com/ulisses.malanski"
-          myTitle="Facebook Profile"
+          myTitle="Ulisses Malanski no Facebook"
         >
           <AiFillFacebook />
         </MyBox>
 
         <MyBox
           myHref="https://www.instagram.com/malanskiart/"
-          myTitle="Instagram"
+          myTitle="Ulisses Malanski no Instagram"
         >
           <AiFillInstagram />
         </MyBox>
       </Flex>
-      <Text bgColor="black" color="white" textAlign="center">
+      <Text bgColor="black" color="base.gray100" textAlign="center">
         <small>Desenvolvido por</small>
         <br />
         <MyBox

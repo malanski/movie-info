@@ -31,11 +31,12 @@ export const SearchMovie = () => {
         onChange={handleSearchMovie}
       />
       <ButtonApp
-        background="background.yellow"
-        color="base.gray500"
+        background="background.red"
+        color="base.gray100"
         colorHover="#ffce1f"
         isDisabled={search.length < 3}
         onClick={searchInfoMovie}
+        title="Pesquisar Títulos"
       >
         <AiOutlineSearch />
         Buscar

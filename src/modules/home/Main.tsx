@@ -85,6 +85,7 @@ export const Main = () => {
             onClick={beforePage}
             colorHover="#ffce1f"
             isDisabled={isDisabledBeforePage}
+            title="Retroceder"
           >
             <AiOutlineArrowLeft />
             Anterior
@@ -95,6 +96,7 @@ export const Main = () => {
             color="base.gray500"
             onClick={nextPage}
             colorHover="#ffce1f"
+            title="Avançar"
           >
             Próxima
             <AiOutlineArrowRight />
@@ -107,6 +109,7 @@ export const Main = () => {
             color="base.gray500"
             onClick={() => getSearchMovie(search)}
             colorHover="#ffce1f"
+            title="Reiniciar catálogo"
           >
             Catálogo Inicial
           </ButtonApp>

@@ -10,7 +10,7 @@ export const theme = extendTheme({
 
       gray600: '#1A1A1A',
       black600: '#131313',
-
+      red: '#a60c0c',
       yellow500: '#ffce1f',
     },
     background: {
@@ -19,6 +19,8 @@ export const theme = extendTheme({
       blue300: '#0b5fe6',
       darkBlue: '#113b54',
       yellow: '#F7D354',
+      red: '#a60c0c',
+
       black: '#161616',
       white: '#FFFFFF',
     },
